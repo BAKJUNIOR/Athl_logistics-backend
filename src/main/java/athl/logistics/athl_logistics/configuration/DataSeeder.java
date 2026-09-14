@@ -21,8 +21,8 @@ import java.util.Set;
 @Slf4j
 public class DataSeeder implements CommandLineRunner {
 
-    private static final String DEFAULT_ADMIN_EMAIL = "admin@athl-logistics.ci";
-    private static final String DEFAULT_ADMIN_PASSWORD = "Admin@2026!";
+    private static final String DEFAULT_ADMIN_EMAIL = "beugreadroh@gmail.com";
+    private static final String DEFAULT_ADMIN_PASSWORD = "Admin123@";
 
     private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
@@ -51,15 +51,17 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
 
-        UserRole adminRole = userRoleRepository.findByRoleName(RoleName.ADMIN)
+        UserRole adminRole = userRoleRepository.findByRoleName(RoleName.SUPER_ADMIN)
                 .orElseThrow(() -> new IllegalStateException("Le rôle ADMIN doit exister avant de créer l'admin initial"));
 
         Set<UserRole> roles = new HashSet<>();
         roles.add(adminRole);
 
         User admin = new User();
-        admin.setFirstName("Admin");
-        admin.setLastName("ATHL");
+        admin.setFirstName("Beugre");
+        admin.setLastName("Alain");
+        admin.setProfilePictureUrl("https://res.cloudinary.com/drfq0bt4z/image/upload/v1789399962/user-profiles/lrwpczeueh6cjytwlga1.jpg");
+        admin.setPhoneNumber("+2250777062160");
         admin.setEmail(DEFAULT_ADMIN_EMAIL);
         admin.setPassword(passwordEncoder.encode(DEFAULT_ADMIN_PASSWORD));
         admin.setRoles(roles);
