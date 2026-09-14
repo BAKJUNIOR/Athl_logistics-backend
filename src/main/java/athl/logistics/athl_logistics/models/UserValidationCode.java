@@ -27,7 +27,7 @@ public class UserValidationCode implements Serializable {
     @Column(nullable = false)
     private Instant expiration;
 
-    @NotBlank(message = "Validation code is required")
+    @NotBlank(message = "Le code de validation est requis")
     @Column(nullable = false)
     private String code;
 

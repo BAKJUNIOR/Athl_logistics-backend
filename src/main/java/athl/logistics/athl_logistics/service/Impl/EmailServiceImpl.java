@@ -6,6 +6,7 @@ import athl.logistics.athl_logistics.service.dto.UserValidationCodeDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,14 @@ import org.thymeleaf.context.Context;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private static final String FROM_ADDRESS = "no-reply@athl-logistics.ci";
-
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
+
+    // Doit correspondre au compte SMTP authentifié (spring.mail.username) : la plupart des
+    // serveurs (dont celui-ci) rejettent l'envoi si l'adresse "From" appartient à un autre
+    // domaine/compte ("Sender address rejected: not owned by user ...").
+    @Value("${spring.mail.username}")
+    private String fromAddress;
 
     @Override
     public void sendActivationCode(UserValidationCodeDTO userValidationCodeDTO) {
@@ -27,7 +32,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setFrom(FROM_ADDRESS);
+            helper.setFrom(fromAddress);
             helper.setTo(userValidationCodeDTO.getUser().getEmail());
             helper.setSubject("Activation de votre compte");
 
@@ -52,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setFrom(FROM_ADDRESS);
+            helper.setFrom(fromAddress);
             helper.setTo(userDTO.getEmail());
             helper.setSubject("Création de votre compte sur Athl-Logistics");
 
@@ -78,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setFrom(FROM_ADDRESS);
+            helper.setFrom(fromAddress);
             helper.setTo(userDTO.getEmail());
             helper.setSubject("Réinitialisation de votre mot de passe");
 
@@ -102,7 +107,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            helper.setFrom(FROM_ADDRESS);
+            helper.setFrom(fromAddress);
             helper.setTo(userDTO.getEmail());
             helper.setSubject(subject);
 

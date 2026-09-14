@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class ActivateAccountDTO {
 
-    @NotBlank(message = "Activation code is required")
+    @NotBlank(message = "Le code d'activation est requis")
     private String code;
 
-    @NotBlank(message = "New password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotBlank(message = "Le nouveau mot de passe est requis")
+    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String newPassword;
 }

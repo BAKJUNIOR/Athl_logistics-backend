@@ -39,6 +39,11 @@ public class UserRegistrationService {
             throw new AccountResourceException("Un compte existe déjà avec cet email : " + dto.getEmail(), HttpStatus.CONFLICT);
         }
 
+        if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isBlank()
+                && userRepository.existsByPhoneNumber(dto.getPhoneNumber())) {
+            throw new AccountResourceException("Un compte existe déjà avec ce numéro de téléphone : " + dto.getPhoneNumber(), HttpStatus.CONFLICT);
+        }
+
         UserRole role = userRoleRepository.findByRoleName(dto.getRoleName())
                 .orElseThrow(() -> new AccountResourceException("Rôle introuvable : " + dto.getRoleName()));
 

@@ -9,6 +9,7 @@ import athl.logistics.athl_logistics.service.dto.ActivateAccountDTO;
 import athl.logistics.athl_logistics.service.dto.ChangePasswordDTO;
 import athl.logistics.athl_logistics.service.dto.UpdateProfileDTO;
 import athl.logistics.athl_logistics.service.dto.UserDTO;
+import athl.logistics.athl_logistics.service.dto.UserSummaryDTO;
 import athl.logistics.athl_logistics.service.dto.UserValidationCodeDTO;
 import athl.logistics.athl_logistics.service.mappers.UserMapper;
 import athl.logistics.athl_logistics.service.mappers.UserValidationCodeMapper;
@@ -21,9 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
@@ -45,10 +48,7 @@ public class UserUtilityService {
         return String.format("%06d", randomInteger);
     }
 
-    // Le code est déjà persisté à ce stade : un souci SMTP ponctuel (identifiants mail
-    // invalides, serveur indisponible...) ne doit ni faire échouer la création du compte, ni
-    // annuler la transaction. L'utilisateur pourra toujours obtenir son code via
-    // resend-activation-code une fois l'envoi de mail fonctionnel.
+
     private void sendActivationCodeBestEffort(UserValidationCodeDTO validationCodeDTO) {
         try {
             emailService.sendActivationCode(validationCodeDTO);
@@ -124,8 +124,7 @@ public class UserUtilityService {
         userRepository.save(user);
     }
 
-    // Pas de flux "mot de passe oublié" self-service dans ce BO : un utilisateur bloqué doit
-    // passer par un ADMIN, qui lui génère un nouveau mot de passe temporaire envoyé par email.
+
     @Transactional
     public void resetUserPassword(Long userId) {
         log.debug("Admin resetting password for user ID: {}", userId);
@@ -145,11 +144,11 @@ public class UserUtilityService {
     }
 
     @Transactional
-    public void resendActivationCode(Long userId) {
-        log.debug("Resending activation code for user ID: {}", userId);
+    public void resendActivationCode(String email) {
+        log.debug("Resending activation code for email: {}", email);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AccountResourceException("Utilisateur introuvable", HttpStatus.NOT_FOUND));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AccountResourceException("Aucun compte trouvé avec cet email.", HttpStatus.NOT_FOUND));
 
         Optional<UserValidationCode> existingCodeOpt = userValidationCodeRepository.findByUserId(user.getId());
 
@@ -190,5 +189,51 @@ public class UserUtilityService {
                 .orElseThrow(() -> new AccountResourceException("Utilisateur introuvable avec l'ID : " + userId, HttpStatus.NOT_FOUND));
         userValidationCodeRepository.deleteByUserId(userId);
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public List<UserSummaryDTO> listUsers() {
+        log.debug("Fetching list of all users");
+        return userRepository.findAll().stream()
+                .map(UserSummaryDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void blockUser(Long userId) {
+        log.debug("Admin blocking user with ID: {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AccountResourceException("Utilisateur introuvable avec l'ID : " + userId, HttpStatus.NOT_FOUND));
+        if (!user.isActive()) {
+            throw new AccountResourceException("Cet utilisateur est déjà bloqué.");
+        }
+        user.setActive(false);
+        userRepository.save(user);
+
+        try {
+            emailService.sendAccountStatusEmail(userMapper.fromEntity(user),
+                    "Votre compte a été bloqué par un administrateur.", "Votre compte a été bloqué");
+        } catch (RuntimeException e) {
+            log.error("Échec d'envoi de l'e-mail de blocage à {} : {}", user.getEmail(), e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void unblockUser(Long userId) {
+        log.debug("Admin unblocking user with ID: {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AccountResourceException("Utilisateur introuvable avec l'ID : " + userId, HttpStatus.NOT_FOUND));
+        if (user.isActive()) {
+            throw new AccountResourceException("Cet utilisateur n'est pas bloqué.");
+        }
+        user.setActive(true);
+        userRepository.save(user);
+
+        try {
+            emailService.sendAccountStatusEmail(userMapper.fromEntity(user),
+                    "Votre compte a été débloqué par un administrateur.", "Votre compte a été débloqué");
+        } catch (RuntimeException e) {
+            log.error("Échec d'envoi de l'e-mail de déblocage à {} : {}", user.getEmail(), e.getMessage());
+        }
     }
 }

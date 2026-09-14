@@ -26,23 +26,24 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "First name is required")
+    @NotBlank(message = "Le prénom est requis")
     @Column(nullable = false)
     private String firstName;
 
-    @NotBlank(message = "Last name is required")
+    @NotBlank(message = "Le nom est requis")
     @Column(nullable = false)
     private String lastName;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email format is invalid")
+    @NotBlank(message = "L'email est requis")
+    @Email(message = "Le format de l'email est invalide")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotBlank(message = "Le mot de passe est requis")
+    @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String password;
 
+    @Column(unique = true)
     private String phoneNumber;
 
 
