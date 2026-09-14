@@ -8,11 +8,14 @@ import athl.logistics.athl_logistics.service.dto.CurrentUserDTO;
 import athl.logistics.athl_logistics.service.dto.RegisterUserDTO;
 import athl.logistics.athl_logistics.service.dto.UpdateProfileDTO;
 import athl.logistics.athl_logistics.service.dto.UserDTO;
+import athl.logistics.athl_logistics.service.dto.UserSummaryDTO;
 import athl.logistics.athl_logistics.service.dto.UserValidationCodeDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +43,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resendActivationCode(Long userId) {
-        userUtilityService.resendActivationCode(userId);
+    public void resendActivationCode(String email) {
+        userUtilityService.resendActivationCode(email);
     }
 
     @Override
@@ -84,5 +87,25 @@ public class UserServiceImpl implements UserService {
     public void deleteByUserId(Long userId) {
         log.debug("Request to delete user with ID: {}", userId);
         userUtilityService.deleteByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public List<UserSummaryDTO> listUsers() {
+        return userUtilityService.listUsers();
+    }
+
+    @Override
+    @Transactional
+    public void blockUser(Long userId) {
+        log.debug("Admin request to block user ID: {}", userId);
+        userUtilityService.blockUser(userId);
+    }
+
+    @Override
+    @Transactional
+    public void unblockUser(Long userId) {
+        log.debug("Admin request to unblock user ID: {}", userId);
+        userUtilityService.unblockUser(userId);
     }
 }

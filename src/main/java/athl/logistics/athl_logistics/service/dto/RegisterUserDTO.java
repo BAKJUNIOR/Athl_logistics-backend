@@ -10,18 +10,18 @@ import lombok.Data;
 @Data
 public class RegisterUserDTO {
 
-    @NotBlank(message = "First name is required")
+    @NotBlank(message = "Le prénom est requis")
     private String firstName;
 
-    @NotBlank(message = "Last name is required")
+    @NotBlank(message = "Le nom est requis")
     private String lastName;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email format is invalid")
+    @NotBlank(message = "L'email est requis")
+    @Email(message = "Le format de l'email est invalide")
     private String email;
 
     private String phoneNumber;
 
-    @NotNull(message = "Role is required")
+    @NotNull(message = "Le rôle est requis")
     private RoleName roleName;
 }
