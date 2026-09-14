@@ -110,6 +110,7 @@ public class UserUtilityService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setPhoneNumber(dto.getPhoneNumber());
+        user.setProfilePictureUrl(dto.getProfilePictureUrl());
         userRepository.save(user);
     }
 

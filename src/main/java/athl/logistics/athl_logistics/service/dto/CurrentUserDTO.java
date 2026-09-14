@@ -14,6 +14,7 @@ public class CurrentUserDTO {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String profilePictureUrl;
     private Instant creationDate;
     private boolean isActive;
     private Set<UserRoleDTO> roles;
@@ -24,6 +25,7 @@ public class CurrentUserDTO {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.phoneNumber = user.getPhoneNumber();
+        this.profilePictureUrl = user.getProfilePictureUrl();
         this.creationDate = user.getCreationDate();
         this.isActive = user.isActive();
         this.roles = user.getRoles() != null ? user.getRoles().stream()

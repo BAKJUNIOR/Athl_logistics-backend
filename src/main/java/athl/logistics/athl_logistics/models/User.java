@@ -45,6 +45,9 @@ public class User implements UserDetails {
 
     private String phoneNumber;
 
+
+    private String profilePictureUrl;
+
     @Column(name = "created_at", updatable = false)
     private Instant creationDate = Instant.now();
 
