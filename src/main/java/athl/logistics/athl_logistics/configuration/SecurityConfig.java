@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -38,16 +39,18 @@ public class SecurityConfig {
         return
                 httpSecurity
                         .csrf(AbstractHttpConfigurer::disable)
+                        .cors(Customizer.withDefaults())
                         .authorizeHttpRequests(
                                 authorize -> authorize
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                         .requestMatchers("/api/v1/authenticate").permitAll()
-                                        .requestMatchers("/api/v1/users/register").hasRole("ADMIN")
+                                        .requestMatchers("/api/v1/users/register").hasAnyRole( "SUPER_ADMIN")
 
-                                        .requestMatchers("/api/v1/users/*/reset-password").hasRole("ADMIN")
-                                        .requestMatchers("/api/v1/users/*/block").hasRole("ADMIN")
-                                        .requestMatchers("/api/v1/users/*/unblock").hasRole("ADMIN")
-                                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
-                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasRole("ADMIN")
+                                        .requestMatchers("/api/v1/users/*/reset-password").hasAnyRole( "SUPER_ADMIN")
+                                        .requestMatchers("/api/v1/users/*/block").hasAnyRole( "SUPER_ADMIN")
+                                        .requestMatchers("/api/v1/users/*/unblock").hasAnyRole( "SUPER_ADMIN")
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAnyRole( "SUPER_ADMIN")
+                                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasAnyRole( "SUPER_ADMIN")
                                         .requestMatchers("/api/v1/users/activation").permitAll()
                                         .requestMatchers("/api/v1/users/resend-activation-code").permitAll()
                                         .requestMatchers("/api/v1/users/current-user").authenticated()

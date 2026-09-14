@@ -1,73 +1,67 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changement de statut de votre compte</title>
-    <style>
-        body {
-            font-family: 'Lato', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        table {
-            border-collapse: collapse !important;
-        }
-        img {
-            display: block;
-            border: 0;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(14, 14, 14, 0.1);
-            overflow: hidden;
-        }
-        .content {
-            padding: 30px;
-        }
-        .content h2 {
-            font-size: 22px;
-            color: #111111;
-        }
-        .content p {
-            font-size: 16px;
-            line-height: 24px;
-            margin-bottom: 20px;
-        }
-        .footer {
-            background-color: #f4f4f4;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #666666;
-        }
-        .footer a {
-            color: #102793;
-            text-decoration: none;
-        }
-    </style>
 </head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<center style="width: 100%; background-color: #f4f4f7;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f7;">
+    <tr>
+        <td align="center" style="padding: 24px 16px;">
+            <table role="presentation" width="460" cellpadding="0" cellspacing="0" border="0" align="center"
+                   style="max-width: 460px; width: 100%; margin: 0 auto; background-color: #ffffff; border: 1px solid #e7e5ef; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(93,67,146,0.08);">
+                <tr>
+                    <td th:replace="~{fragments/email-common :: accent-bar}"></td>
+                </tr>
+                <tr>
+                    <td th:replace="~{fragments/email-common :: header}"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 16px 24px 0; text-align: center;">
+                        <h2 style="margin: 0 0 16px; font-size: 20px; color: #5d4392; font-weight: 700;">
+                            Changement de statut de votre compte
+                        </h2>
+                        <p style="margin: 0 0 16px; font-size: 14px; line-height: 22px; color: #4b4756;">
+                            Bonjour <span th:text="${firstName}">Utilisateur</span>,<br/>
+                            votre compte back-office Athl Logistics a été
+                            <span th:text="${status}"
+                                  th:style="${status == 'activé'} ? 'font-weight:700;color:#137a3b;' : 'font-weight:700;color:#c0392b;'">statut</span>
+                            par un administrateur.
+                        </p>
 
-<body>
-<div class="email-container">
-    <div class="content">
-        <h2>Changement de statut de votre compte</h2>
-        <p>Cher(e) <span th:text="${firstName}"></span>,</p>
-        <p>Votre compte a été <span th:text="${status}"></span>.</p>
-        <p>Raison : <span th:text="${reason}"></span></p>
-        <p>Si vous avez des questions, veuillez contacter l'administration.</p>
-        <p>Cordialement,<br/>L'équipe Athl-Logistics</p>
-    </div>
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin: 0 0 24px;">
+                            <tr>
+                                <td style="background-color: #f3effa; border: 1px solid #d9cdec; border-radius: 10px; padding: 12px 14px;">
+                                    <p style="margin: 0 0 2px; font-size: 11px; font-weight: 600; color: #7a6a99; text-transform: uppercase; letter-spacing: 0.5px;">Raison</p>
+                                    <p style="margin: 0; font-size: 13px; color: #1a1523;" th:text="${reason}">Raison</p>
+                                </td>
+                            </tr>
+                        </table>
 
-    <div class="footer">
-        <p>Si vous avez des questions, veuillez nous contacter à <a href="mailto:contact@athl-logistics.ci">contact@athl-logistics.ci</a>.</p>
-    </div>
-</div>
+                        <p th:if="${status == 'activé'}" style="margin: 0 0 8px; font-size: 14px; line-height: 22px; color: #4b4756;">
+                            Vous pouvez dès à présent vous reconnecter normalement.
+                        </p>
+                        <p th:unless="${status == 'activé'}" style="margin: 0 0 8px; font-size: 14px; line-height: 22px; color: #4b4756;">
+                            Vous ne pouvez plus accéder au back-office tant que votre compte n'a pas été réactivé.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 16px 24px 0; text-align: center;">
+                        <p style="margin: 0; font-size: 12px; line-height: 18px; color: #9a9a9a;">
+                            Une question sur cette décision ? Contactez votre administrateur.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td th:replace="~{fragments/email-common :: footer}"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</center>
 </body>
-
 </html>

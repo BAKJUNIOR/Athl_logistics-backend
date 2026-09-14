@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-// Même logique que RestAuthenticationEntryPoint, pour le cas 403 : l'utilisateur est bien
-// authentifié mais son rôle ne l'autorise pas pour cette route (ex: /users/register réservé à ADMIN).
+
 @Component
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
 

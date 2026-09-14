@@ -5,10 +5,7 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
-// Écrit une erreur au même format que ResponseUtil.error(...)/ResponseWrapper, sans dépendre
-// d'un bean ObjectMapper injecté (RestAuthenticationEntryPoint / RestAccessDeniedHandler
-// peuvent être sollicités très tôt dans la chaîne de filtres Spring Security ; le payload est
-// fixe et trivial, donc pas besoin d'un vrai (dé)sérialiseur JSON ici).
+
 final class JsonErrorWriter {
 
     private JsonErrorWriter() {
