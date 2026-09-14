@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informations de votre Compte</title>
+    <style>
+        body {
+            font-family: 'Lato', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        table {
+            border-collapse: collapse !important;
+        }
+        img {
+            display: block;
+            border: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(14, 14, 14, 0.1);
+            overflow: hidden;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content h2 {
+            font-size: 22px;
+            color: #111111;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 20px;
+        }
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .info-list li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .info-list li strong {
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #666666;
+        }
+        .footer a {
+            color: #102793;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="email-container">
+    <div class="content">
+        <h2>Bonjour, <span th:text="${firstName}">Utilisateur</span></h2>
+        <p>Votre compte <strong th:text="${userType}">Type de compte</strong> a été créé avec succès sur Athl-Logistics.</p>
+        <p>Voici vos informations de connexion :</p>
+        <ul class="info-list">
+            <li><strong>Email :</strong> <span th:text="${email}">Votre email</span></li>
+            <li><strong>Mot de passe :</strong> <span th:text="${password}">Votre mot de passe</span></li>
+        </ul>
+        <p>Vous pouvez utiliser ces informations pour vous connecter à la plateforme. Une fois connecté, nous vous recommandons de modifier votre mot de passe depuis votre profil pour plus de sécurité.</p>
+    </div>
+
+    <div class="footer">
+        <p>Si vous avez des questions, veuillez nous contacter à <a href="mailto:contact@athl-logistics.ci">contact@athl-logistics.ci</a>.</p>
+    </div>
+</div>
+</body>
+
+</html>

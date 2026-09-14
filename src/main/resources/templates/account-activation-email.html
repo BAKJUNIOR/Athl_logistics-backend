@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation de votre compte</title>
+    <style>
+        body {
+            font-family: 'Lato', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        table {
+            border-collapse: collapse !important;
+        }
+        img {
+            display: block;
+            border: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(14, 14, 14, 0.1);
+            overflow: hidden;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content h3 {
+            font-size: 22px;
+            color: #111111;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 20px;
+        }
+        .activation-code {
+            width: 90%;
+            background-color: #e7e27d;
+            color: #090909;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            display: inline-block;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #666666;
+        }
+        .footer a {
+            color: #102793;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="content">
+        <h3>Bonjour, <span th:text="${firstName} + ' ' + ${lastName}">Utilisateur</span></h3>
+        <p>Voici votre code d'activation de compte Athl-Logistics :</p>
+        <div class="activation-code" th:text="${code}">CODE</div>
+        <p>Ce code est valable pendant 10 minutes. Si vous rencontrez des difficultés, n'hésitez pas à nous contacter.</p>
+    </div>
+    <div class="footer">
+        <p>Pour toute question, contactez-nous à <a href="mailto:contact@athl-logistics.ci">contact@athl-logistics.ci</a>.</p>
+    </div>
+</div>
+</body>
+</html>
