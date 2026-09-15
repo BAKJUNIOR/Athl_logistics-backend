@@ -95,6 +95,15 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/v1/popups").permitAll()
                                         .requestMatchers("/api/v1/popups/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                                        // Demandes de devis / candidatures : soumission publique (formulaires du
+                                        // site vitrine), consultation et suivi (liste, statut, suppression)
+                                        // réservés aux admins — ce sont des soumissions de visiteurs, pas un
+                                        // contenu que le BO crée.
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/quotes").permitAll()
+                                        .requestMatchers("/api/v1/quotes/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/applications").permitAll()
+                                        .requestMatchers("/api/v1/applications/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
