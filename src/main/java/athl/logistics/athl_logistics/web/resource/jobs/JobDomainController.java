@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Liste ouverte des domaines métier des offres d'emploi (voir JobDomain) : publique en lecture
-// (le front en a besoin pour les filtres de /carrieres), création/suppression réservées aux admins
-// — n'importe quel admin peut en ajouter un nouveau directement depuis le formulaire d'offre.
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/job-domains")
@@ -32,6 +30,12 @@ public class JobDomainController {
     public ResponseEntity<JobDomainDTO> create(@Valid @RequestBody JobDomainUpsertDTO dto) {
         log.debug("REST request to create a job domain: {}", dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(jobDomainService.create(dto));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<JobDomainDTO> update(@PathVariable Long id, @Valid @RequestBody JobDomainUpsertDTO dto) {
+        log.debug("REST request to update job domain ID: {}", id);
+        return ResponseEntity.ok(jobDomainService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

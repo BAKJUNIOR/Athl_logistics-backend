@@ -10,5 +10,7 @@ public interface JobDomainService {
 
     JobDomainDTO create(JobDomainUpsertDTO dto);
 
+    JobDomainDTO update(Long id, JobDomainUpsertDTO dto);
+
     void delete(Long id);
 }
