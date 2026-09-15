@@ -73,6 +73,11 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/v1/job-domains").permitAll()
                                         .requestMatchers("/api/v1/job-domains/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                                        // Équipe : liste publique (page Équipe du site), pas de notion de
+                                        // brouillon/publié ici — gestion réservée aux admins.
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/team").permitAll()
+                                        .requestMatchers("/api/v1/team/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
