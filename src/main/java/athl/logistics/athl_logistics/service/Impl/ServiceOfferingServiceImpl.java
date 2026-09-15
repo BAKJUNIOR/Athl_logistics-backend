@@ -61,7 +61,10 @@ public class ServiceOfferingServiceImpl implements ServiceOfferingService {
     public ServiceDTO create(ServiceUpsertDTO dto) {
         ServiceOffering entity = new ServiceOffering();
         applyScalarFields(entity, dto);
-        entity.setSlug(generateUniqueSlug(dto.getTitleFr()));
+        String slugSource = (dto.getShortTitleFr() != null && !dto.getShortTitleFr().isBlank())
+                ? dto.getShortTitleFr()
+                : dto.getTitleFr();
+        entity.setSlug(generateUniqueSlug(slugSource));
         applyPrestations(entity, dto.getPrestations());
         applyProcessSteps(entity, dto.getProcess());
 
