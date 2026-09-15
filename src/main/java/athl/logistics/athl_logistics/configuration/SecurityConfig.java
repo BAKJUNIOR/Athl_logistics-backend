@@ -54,6 +54,15 @@ public class SecurityConfig {
                                         .requestMatchers("/api/v1/users/activation").permitAll()
                                         .requestMatchers("/api/v1/users/resend-activation-code").permitAll()
                                         .requestMatchers("/api/v1/users/current-user").authenticated()
+
+                                        // Services : liste publique (filtrée par ServiceOfferingServiceImpl selon
+                                        // l'authentification), détail par slug public (publiés uniquement),
+                                        // tout le reste (détail par id, création, modification, publier/
+                                        // dépublier, suppression) réservé aux admins.
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/services").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/services/slug/**").permitAll()
+                                        .requestMatchers("/api/v1/services/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
