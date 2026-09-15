@@ -1,9 +1,11 @@
 package athl.logistics.athl_logistics.service.Impl;
 
 import athl.logistics.athl_logistics.models.JobBullet;
+import athl.logistics.athl_logistics.models.JobDomain;
 import athl.logistics.athl_logistics.models.JobOffer;
 import athl.logistics.athl_logistics.models.enums.JobBulletKind;
 import athl.logistics.athl_logistics.models.enums.JobStatus;
+import athl.logistics.athl_logistics.repositories.JobDomainRepository;
 import athl.logistics.athl_logistics.repositories.JobOfferRepository;
 import athl.logistics.athl_logistics.service.JobOfferService;
 import athl.logistics.athl_logistics.service.dto.JobBulletDTO;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class JobOfferServiceImpl implements JobOfferService {
 
     private final JobOfferRepository repository;
+    private final JobDomainRepository jobDomainRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -96,7 +99,9 @@ public class JobOfferServiceImpl implements JobOfferService {
     }
 
     private void applyScalarFields(JobOffer entity, JobUpsertDTO dto) {
-        entity.setDomain(dto.getDomain());
+        JobDomain domain = jobDomainRepository.findById(dto.getDomainId())
+                .orElseThrow(() -> new AccountResourceException("Domaine introuvable avec l'ID : " + dto.getDomainId(), HttpStatus.NOT_FOUND));
+        entity.setDomain(domain);
         entity.setTitleFr(dto.getTitleFr());
         entity.setTitleEn(dto.getTitleEn());
         entity.setDescriptionFr(dto.getDescriptionFr());

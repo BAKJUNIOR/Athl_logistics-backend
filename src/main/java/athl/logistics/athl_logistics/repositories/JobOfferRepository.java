@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface JobOfferRepository extends JpaRepository<JobOffer, Long> {
     List<JobOffer> findByStatus(JobStatus status);
+
+    boolean existsByDomain_Id(Long domainId);
 }

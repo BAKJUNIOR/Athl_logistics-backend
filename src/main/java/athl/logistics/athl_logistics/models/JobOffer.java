@@ -1,6 +1,5 @@
 package athl.logistics.athl_logistics.models;
 
-import athl.logistics.athl_logistics.models.enums.JobDomain;
 import athl.logistics.athl_logistics.models.enums.JobStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -30,8 +29,8 @@ public class JobOffer {
     private Long id;
 
     @NotNull(message = "Le domaine est requis")
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "domain_id", nullable = false)
     private JobDomain domain;
 
     @NotBlank(message = "Le titre en français est requis")

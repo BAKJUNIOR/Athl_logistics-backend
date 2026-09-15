@@ -1,6 +1,5 @@
 package athl.logistics.athl_logistics.service.dto;
 
-import athl.logistics.athl_logistics.models.enums.JobDomain;
 import athl.logistics.athl_logistics.models.enums.JobStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +15,7 @@ import java.util.List;
 public class JobUpsertDTO {
 
     @NotNull(message = "Le domaine est requis")
-    private JobDomain domain;
+    private Long domainId;
 
     @NotBlank(message = "Le titre en français est requis")
     private String titleFr;

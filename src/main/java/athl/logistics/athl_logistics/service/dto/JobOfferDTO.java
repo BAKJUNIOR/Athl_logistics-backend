@@ -3,7 +3,6 @@ package athl.logistics.athl_logistics.service.dto;
 import athl.logistics.athl_logistics.models.JobBullet;
 import athl.logistics.athl_logistics.models.JobOffer;
 import athl.logistics.athl_logistics.models.enums.JobBulletKind;
-import athl.logistics.athl_logistics.models.enums.JobDomain;
 import athl.logistics.athl_logistics.models.enums.JobStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class JobOfferDTO {
     private Long id;
-    private JobDomain domain;
+    private JobDomainDTO domain;
     private String titleFr;
     private String titleEn;
     private String descriptionFr;
@@ -37,7 +36,7 @@ public class JobOfferDTO {
 
     public JobOfferDTO(JobOffer entity) {
         this.id = entity.getId();
-        this.domain = entity.getDomain();
+        this.domain = entity.getDomain() != null ? new JobDomainDTO(entity.getDomain()) : null;
         this.titleFr = entity.getTitleFr();
         this.titleEn = entity.getTitleEn();
         this.descriptionFr = entity.getDescriptionFr();
