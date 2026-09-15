@@ -1,8 +1,10 @@
 package athl.logistics.athl_logistics.configuration;
 
+import athl.logistics.athl_logistics.models.JobDomain;
 import athl.logistics.athl_logistics.models.User;
 import athl.logistics.athl_logistics.models.UserRole;
 import athl.logistics.athl_logistics.models.enums.RoleName;
+import athl.logistics.athl_logistics.repositories.JobDomainRepository;
 import athl.logistics.athl_logistics.repositories.UserRepository;
 import athl.logistics.athl_logistics.repositories.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -26,12 +30,14 @@ public class DataSeeder implements CommandLineRunner {
 
     private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
+    private final JobDomainRepository jobDomainRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
         seedRoles();
         seedAdmin();
+        seedJobDomains();
     }
 
     private void seedRoles() {
@@ -70,5 +76,26 @@ public class DataSeeder implements CommandLineRunner {
 
         userRepository.save(admin);
         log.warn("Compte administrateur initial créé : {} — pensez à changer son mot de passe.", DEFAULT_ADMIN_EMAIL);
+    }
+
+    // Point de départ seulement : n'importe quel admin peut ensuite ajouter/supprimer des
+    // domaines depuis le formulaire d'offre (voir JobDomainService) — liste ouverte, pas un enum figé.
+    private void seedJobDomains() {
+        Map<String, String> defaults = new LinkedHashMap<>();
+        defaults.put("Chantier", "Construction site");
+        defaults.put("Second œuvre", "Finishing works");
+        defaults.put("Mobilité", "Mobility");
+        defaults.put("Logistique", "Logistics");
+        defaults.put("Support", "Support");
+
+        defaults.forEach((labelFr, labelEn) -> {
+            if (jobDomainRepository.findByLabelFrIgnoreCase(labelFr).isEmpty()) {
+                JobDomain domain = new JobDomain();
+                domain.setLabelFr(labelFr);
+                domain.setLabelEn(labelEn);
+                jobDomainRepository.save(domain);
+                log.info("Domaine de carrière créé : {}", labelFr);
+            }
+        });
     }
 }
