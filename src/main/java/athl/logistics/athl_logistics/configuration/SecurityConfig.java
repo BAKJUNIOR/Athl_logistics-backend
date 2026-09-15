@@ -90,6 +90,11 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/v1/site-settings/contact").permitAll()
                                         .requestMatchers(HttpMethod.PUT, "/api/v1/site-settings/contact").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                                        // Popups : liste publique filtrée sur les actives (une par page),
+                                        // gestion complète (CRUD + activation) réservée aux admins.
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/popups").permitAll()
+                                        .requestMatchers("/api/v1/popups/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
