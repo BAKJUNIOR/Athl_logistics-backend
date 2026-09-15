@@ -78,6 +78,11 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/v1/team").permitAll()
                                         .requestMatchers("/api/v1/team/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                                        // Réalisations/Projets : même principe que Services (liste publique
+                                        // filtrée selon l'authentification), sans détail par slug.
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/projects").permitAll()
+                                        .requestMatchers("/api/v1/projects/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
