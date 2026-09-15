@@ -1,10 +1,15 @@
 package athl.logistics.athl_logistics.configuration;
 
+import athl.logistics.athl_logistics.models.HomeStat;
 import athl.logistics.athl_logistics.models.JobDomain;
+import athl.logistics.athl_logistics.models.SiteContact;
 import athl.logistics.athl_logistics.models.User;
 import athl.logistics.athl_logistics.models.UserRole;
+import athl.logistics.athl_logistics.models.enums.HomeStatKey;
 import athl.logistics.athl_logistics.models.enums.RoleName;
+import athl.logistics.athl_logistics.repositories.HomeStatRepository;
 import athl.logistics.athl_logistics.repositories.JobDomainRepository;
+import athl.logistics.athl_logistics.repositories.SiteContactRepository;
 import athl.logistics.athl_logistics.repositories.UserRepository;
 import athl.logistics.athl_logistics.repositories.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +36,8 @@ public class DataSeeder implements CommandLineRunner {
     private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
     private final JobDomainRepository jobDomainRepository;
+    private final HomeStatRepository homeStatRepository;
+    private final SiteContactRepository siteContactRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -38,6 +45,8 @@ public class DataSeeder implements CommandLineRunner {
         seedRoles();
         seedAdmin();
         seedJobDomains();
+        seedHomeStats();
+        seedSiteContact();
     }
 
     private void seedRoles() {
@@ -97,5 +106,36 @@ public class DataSeeder implements CommandLineRunner {
                 log.info("Domaine de carrière créé : {}", labelFr);
             }
         });
+    }
+
+    private void seedHomeStats() {
+        if (homeStatRepository.count() > 0) return;
+
+        homeStatRepository.save(newHomeStat(HomeStatKey.SITES_DELIVERED, "Chantiers livrés", 2193, 0, "+"));
+        homeStatRepository.save(newHomeStat(HomeStatKey.PROJECT_VALUE, "Valeur des projets", 3.16, 2, " M€"));
+        homeStatRepository.save(newHomeStat(HomeStatKey.ASSET_VALUE, "Valeur des actifs", 121.2, 1, " M€"));
+        log.info("Compteurs de l'accueil initialisés");
+    }
+
+    private HomeStat newHomeStat(HomeStatKey key, String label, double value, int decimals, String suffix) {
+        HomeStat stat = new HomeStat();
+        stat.setKey(key);
+        stat.setLabel(label);
+        stat.setValue(value);
+        stat.setDecimals(decimals);
+        stat.setSuffix(suffix);
+        return stat;
+    }
+
+    private void seedSiteContact() {
+        if (siteContactRepository.existsById(1L)) return;
+
+        SiteContact contact = new SiteContact();
+        contact.setPhone1("+225 07 78 09 58 58");
+        contact.setPhone2("+225 07 09 99 33 47");
+        contact.setPhone3("+225 07 58 60 16 27");
+        contact.setAddress("Abidjan, Côte d'Ivoire");
+        siteContactRepository.save(contact);
+        log.info("Coordonnées du site initialisées");
     }
 }

@@ -83,6 +83,13 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/v1/projects").permitAll()
                                         .requestMatchers("/api/v1/projects/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
 
+                                        // Paramètres du site (compteurs + coordonnées) : lecture publique
+                                        // (accueil, footer), modification réservée aux admins.
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/home-stats").permitAll()
+                                        .requestMatchers(HttpMethod.PUT, "/api/v1/home-stats").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                                        .requestMatchers(HttpMethod.GET, "/api/v1/site-settings/contact").permitAll()
+                                        .requestMatchers(HttpMethod.PUT, "/api/v1/site-settings/contact").hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                                         .requestMatchers("/ws/**").permitAll() // connexions WebSocket
                                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                         .anyRequest().authenticated()
