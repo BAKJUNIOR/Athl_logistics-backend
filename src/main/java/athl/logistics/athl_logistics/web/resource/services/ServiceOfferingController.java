@@ -21,7 +21,6 @@ public class ServiceOfferingController {
 
     private final ServiceOfferingService serviceOfferingService;
 
-    // Public : publiés uniquement pour un appelant anonyme, tout pour un admin (voir SecurityConfig).
     @GetMapping
     public ResponseEntity<List<ServiceSummaryDTO>> list() {
         return ResponseEntity.ok(serviceOfferingService.list());

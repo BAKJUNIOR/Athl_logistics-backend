@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Public : publiés uniquement pour un appelant anonyme, tout pour un admin (voir SecurityConfig).
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/projects")

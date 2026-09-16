@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// Réglages du site vitrine : compteurs de l'accueil + coordonnées/réseaux sociaux.
-// Public en lecture (le front en a besoin pour l'accueil et le footer), modification
-// réservée aux admins. Jeux de données fixes : pas de create/delete, un seul PUT global.
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
