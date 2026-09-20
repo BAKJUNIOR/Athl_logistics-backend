@@ -1,0 +1,17 @@
+name: deploy athl back # Nom du process
+on: [push] # Chaque fois qu'on push le code déploie
+jobs:
+
+  create-folder: # crée un répertoire sur le serveur
+    name: create folder
+    runs-on: ubuntu-latest
+    steps: # les étapes du job
+      - name: execute commands
+        uses: appleboy/ssh-action@v1
+        with: # mettre les variables crée depuis github
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }} # la key
+          port: 22 # le port pas default quand ce connect a un serveur
+          script: | # on execute un ensemble de script
+            mkdir /opt/application/athl/athl-ms
